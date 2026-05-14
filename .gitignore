@@ -18,3 +18,5 @@ proteindj
 proteindj_runs
 results
 .nextflow.log
+configs
+envs
