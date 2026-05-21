@@ -7,7 +7,6 @@ results/processed_md_features/
 *.pdb
 __pycache__/
 .ipynb_checkpoints/
-slurm
 .nextflow
 designs
 features
