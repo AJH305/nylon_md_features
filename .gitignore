@@ -19,3 +19,9 @@ results
 .nextflow.log
 configs
 envs
+boltzgen/.github
+boltzgen/assets
+boltzgen/slurm-example
+boltzgen/src
+boltzgen/test
+boltzgen/
