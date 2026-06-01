@@ -1,0 +1,5 @@
+variant,topology,trajectory
+WT,data/md/WT/topology.pdb,data/md/WT/trajectory.xtc
+D99R,data/md/D99R/topology.pdb,data/md/D99R/trajectory.xtc
+NylC_HP,data/md/NylC_HP/topology.pdb,data/md/NylC_HP/trajectory.xtc
+NylC_HP_D99R,data/md/NylC_HP_D99R/topology.pdb,data/md/NylC_HP_D99R/trajectory.xtc

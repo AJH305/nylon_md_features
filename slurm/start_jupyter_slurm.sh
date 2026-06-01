@@ -20,6 +20,7 @@ JOB_ID=$(sbatch --parsable <<EOF
 #SBATCH --cpus-per-task=$CPUS
 #SBATCH --mem=$MEM
 #SBATCH --partition=$PARTITION
+#SBATCH -A thes2304
 
 cd "$PROJECT_DIR"
 source "$ENV_PATH/bin/activate"

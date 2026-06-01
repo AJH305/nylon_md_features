@@ -1,0 +1,22 @@
+sbatch: [I] First time submitting. Permissions added.
+sbatch: [I] Please re-submit your job if this submission yields an error.
+Submitted Jupyter job: 755634
+
+Check status:
+squeue -j 755634
+
+Get compute node once job is running:
+NODE=$(squeue -j 755634 -h -o '%N')
+echo $NODE
+
+Check Jupyter token:
+cat /home/dwp46550/ba_nylon/logs/jupyter_755634.err
+
+Start tunnel from login node to compute node:
+ssh -4 -N -L 8899:localhost:8888 <NODE>
+
+Then use in VS Code:
+http://localhost:8899/?token=<TOKEN>
+
+Stop job later with:
+scancel 755634

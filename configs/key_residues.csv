@@ -1,0 +1,9 @@
+position,chain,wt_residue,role
+99,A,ASP,beneficial_position
+134,A,PHE,beneficial_position
+267,B,THR,catalytic_triad
+304,B,ASP,beneficial_position
+305,B,MET,pocket_neighbor
+306,B,ASP,catalytic_triad
+308,B,ASP,catalytic_triad
+330,B,ARG,beneficial_position

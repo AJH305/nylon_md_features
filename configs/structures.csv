@@ -1,0 +1,5 @@
+variant,pdb_file,chains
+WT,data/raw/wt.pdb,A+B
+D99R,data/raw/d99r.pdb,A+B
+NylC_HP,data/raw/f134w_d304m_r330a.pdb,A+B
+NylC_HP_D99R,data/raw/d99r_f134w_d304m_r330a.pdb,A+B

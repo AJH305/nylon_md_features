@@ -1,27 +1,45 @@
-data
-results/processed_md_features/
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Environments
+envs/
+.venv/
+venv/
+
+# Nextflow
+.nextflow/
+.nextflow.log
+work/
+
+# MD trajectories
 *.xtc
 *.trr
-*.tpr
-*.gro
-*.pdb
-__pycache__/
-.ipynb_checkpoints/
-.nextflow
-designs
-features
-figures
-inputs
-logs
+*.tng
+
+# Gromacs runtime
+*.edr
+*.log
+*.cpt
+
+# Large structure outputs
+results/
+proteindj_runs/
+designs/generated/
+features/generated/
+boltzgen
 proteindj
-proteindj_runs
-results
-.nextflow.log
-configs
-envs
-boltzgen/.github
-boltzgen/assets
-boltzgen/slurm-example
-boltzgen/src
-boltzgen/test
-boltzgen/
+data
+
+# HPC logs
+logs/
+
+# HuggingFace / cache
+cache/
+hf_cache/
+
+# Temporary files
+*.tmp
+*.bak
+.DS_Store
