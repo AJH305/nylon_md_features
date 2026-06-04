@@ -24,7 +24,7 @@ work/
 *.cpt
 
 # Large structure outputs
-results/
+results/md_feature_analysis
 proteindj_runs/
 designs/generated/
 features/generated/
