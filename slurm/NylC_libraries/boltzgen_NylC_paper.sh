@@ -3,14 +3,14 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=96G
-#SBATCH --time=10:00:00
+#SBATCH --time=24:00:00
 #SBATCH --job-name=bg_NylC_paper
 #SBATCH --output=/work/%u/slurm/logs/bg_NylC_paper/bg_NylC_paper_%j.out
 #SBATCH --error=/work/%u/slurm/logs/bg_NylC_paper/bg_NylC_paper_%j.err
 #SBATCH --mail-type=BEGIN,END,ERROR
 #SBATCH --mail-user=arthur.hehner@rwth-aachen.de
 #SBATCH -A thes2304
-
+#SBATCH --ntasks=1
 
 set -euo pipefail
 
@@ -25,7 +25,12 @@ mkdir -p /work/$USER/workdir
 
 module purge
 
-source ~/miniforge3/bin/activate
+#source ~/miniforge3/bin/activate
+#conda activate bg
+
+export CONDA_ROOT=$HOME/miniforge3
+source $CONDA_ROOT/etc/profile.d/conda.sh
+export PATH="$CONDA_ROOT/bin:$PATH"
 conda activate bg
 
 export NVIDIA_LIB_DIRS="$(find "$CONDA_PREFIX/lib/python3.12/site-packages/nvidia" -type d -name lib | tr '\n' ':')"
@@ -38,8 +43,8 @@ cd ~/ba_nylon/boltzgen
 
 NAME="NylC_paper"
 CONFIG="NylC/run/NylC_paper.yaml"
-NUM_DESIGNS=90
-BUDGET=2
+NUM_DESIGNS=2000 
+BUDGET=100
 OUT="/work/$USER/workdir/nylc_run_${NAME}_${SLURM_JOB_ID}"
 
 echo "===== PYTHON CHECK ====="
@@ -54,12 +59,13 @@ echo "CUDA_ROOT: ${CUDA_ROOT:-unset}"
 echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:-unset}"
 
 echo "===== CUDA CHECK ====="
-nvidia-smi
+srun --ntasks=1 --gpus-per-task=1 nvidia-smi
 
-python - <<'PY'
+srun --ntasks=1 --gpus-per-task=1 python - <<'PY'
 import os
 import torch
 
+print("CUDA_VISIBLE_DEVICES:", os.environ.get("CUDA_VISIBLE_DEVICES"))
 print("Torch version:", torch.__version__)
 print("Torch CUDA version:", torch.version.cuda)
 print("CUDA available:", torch.cuda.is_available())
@@ -72,7 +78,6 @@ if not torch.cuda.is_available():
 print("GPU:", torch.cuda.get_device_name(0))
 print("Device capability:", torch.cuda.get_device_capability(0))
 PY
-
 echo "===== CUEQUIVARIANCE IMPORT CHECK ====="
 python - <<'PY'
 try:
@@ -93,7 +98,7 @@ echo "===== RUNNING BOLTZGEN ====="
 srun --ntasks=1 --gpus-per-task=1 \
   boltzgen run "$CONFIG" \
     --output "$OUT" \
-    --protocol protein-anything \
+    --protocol protein-redesign \
     --num_designs "$NUM_DESIGNS" \
     --budget "$BUDGET"
 

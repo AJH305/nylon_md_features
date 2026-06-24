@@ -1,0 +1,20 @@
+Submitted Jupyter job: 1210022
+
+Check status:
+squeue -j 1210022
+
+Get compute node once job is running:
+NODE=$(squeue -j 1210022 -h -o '%N')
+echo $NODE
+
+Check Jupyter token:
+cat /home/dwp46550/ba_nylon/logs/jupyter_1210022.err
+
+Start tunnel from login node to compute node:
+ssh -4 -N -L 8899:localhost:8888 <NODE>
+
+Then use in VS Code:
+http://localhost:8899/?token=<TOKEN>
+
+Stop job later with:
+scancel 1210022
