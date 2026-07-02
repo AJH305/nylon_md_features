@@ -3,21 +3,33 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=96G
-#SBATCH --time=24:00:00
-#SBATCH --job-name=bg_NylC_paper
-#SBATCH --output=/work/%u/slurm/logs/bg_NylC_paper/bg_NylC_paper_%j.out
-#SBATCH --error=/work/%u/slurm/logs/bg_NylC_paper/bg_NylC_paper_%j.err
-#SBATCH --mail-type=BEGIN,END,ERROR
+#SBATCH --job-name=bg_NylC_array
+#SBATCH --mail-type=END,ERROR
 #SBATCH --mail-user=arthur.hehner@rwth-aachen.de
-#SBATCH -A thes2304
 #SBATCH --ntasks=1
 
 set -euo pipefail
+set -x
 
 echo "===== JOB START ====="
 date
 hostname
-echo "SLURM_JOB_ID: ${SLURM_JOB_ID}"
+
+echo "SLURM_JOB_ID: ${SLURM_JOB_ID:-unset}"
+echo "SLURM_ARRAY_JOB_ID: ${SLURM_ARRAY_JOB_ID:-unset}"
+echo "SLURM_ARRAY_TASK_ID: ${SLURM_ARRAY_TASK_ID:-unset}"
+
+if [[ $# -lt 4 ]]; then
+    echo "Usage: $0 <design_spec> <outdir> <num_designs_per_job> <conda_environment> [extra boltzgen args...]"
+    exit 1
+fi
+
+DESIGN_SPEC="$1"
+OUTDIR="$2"
+NUM_DESIGNS="$3"
+CONDA_ENVIRONMENT="$4"
+shift 4
+EXTRA_ARGS=("$@")
 
 mkdir -p /work/$USER/logs
 mkdir -p /work/$USER/cache/huggingface
@@ -25,13 +37,10 @@ mkdir -p /work/$USER/workdir
 
 module purge
 
-#source ~/miniforge3/bin/activate
-#conda activate bg
-
 export CONDA_ROOT=$HOME/miniforge3
 source $CONDA_ROOT/etc/profile.d/conda.sh
 export PATH="$CONDA_ROOT/bin:$PATH"
-conda activate bg
+conda activate "$CONDA_ENVIRONMENT"
 
 export NVIDIA_LIB_DIRS="$(find "$CONDA_PREFIX/lib/python3.12/site-packages/nvidia" -type d -name lib | tr '\n' ':')"
 export LD_LIBRARY_PATH="${NVIDIA_LIB_DIRS}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
@@ -41,11 +50,16 @@ export TRANSFORMERS_CACHE=/work/$USER/cache/huggingface
 
 cd ~/ba_nylon/boltzgen
 
-NAME="NylC_paper"
-CONFIG="NylC/run/NylC_paper.yaml"
-NUM_DESIGNS=2000 
-BUDGET=20
-OUT="/work/$USER/workdir/nylc_run_${NAME}_${SLURM_JOB_ID}"
+TASK_OUT="${OUTDIR}/task-${SLURM_ARRAY_JOB_ID}-${SLURM_ARRAY_TASK_ID}"
+mkdir -p "$TASK_OUT"
+
+echo "===== SETTINGS ====="
+echo "DESIGN_SPEC: $DESIGN_SPEC"
+echo "OUTDIR: $OUTDIR"
+echo "TASK_OUT: $TASK_OUT"
+echo "NUM_DESIGNS: $NUM_DESIGNS"
+echo "CONDA_ENVIRONMENT: $CONDA_ENVIRONMENT"
+echo "EXTRA_ARGS: ${EXTRA_ARGS[*]:-none}"
 
 echo "===== PYTHON CHECK ====="
 which python
@@ -57,6 +71,7 @@ echo "CONDA_PREFIX: ${CONDA_PREFIX:-unset}"
 echo "CUDA_HOME: ${CUDA_HOME:-unset}"
 echo "CUDA_ROOT: ${CUDA_ROOT:-unset}"
 echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:-unset}"
+echo "CUDA_VISIBLE_DEVICES: ${CUDA_VISIBLE_DEVICES:-unset}"
 
 echo "===== CUDA CHECK ====="
 srun --ntasks=1 --gpus-per-task=1 nvidia-smi
@@ -78,6 +93,7 @@ if not torch.cuda.is_available():
 print("GPU:", torch.cuda.get_device_name(0))
 print("Device capability:", torch.cuda.get_device_capability(0))
 PY
+
 echo "===== CUEQUIVARIANCE IMPORT CHECK ====="
 python - <<'PY'
 try:
@@ -89,18 +105,18 @@ except Exception:
 PY
 
 echo "===== CHECKING CONFIG ====="
-boltzgen check "$CONFIG"
-
-mkdir -p "$OUT"
+boltzgen check "$DESIGN_SPEC"
 
 echo "===== RUNNING BOLTZGEN ====="
 
 srun --ntasks=1 --gpus-per-task=1 \
-  boltzgen run "$CONFIG" \
-    --output "$OUT" \
-    --protocol protein-redesign \
+    boltzgen run "$DESIGN_SPEC" \
+    --output "$TASK_OUT" \
     --num_designs "$NUM_DESIGNS" \
-    --budget "$BUDGET"
+    "${EXTRA_ARGS[@]}"
+
+echo "success" > "${TASK_OUT}/_SUCCESS.txt"
+date >> "${TASK_OUT}/_SUCCESS.txt"
 
 echo "===== JOB FINISHED ====="
 date
