@@ -113,7 +113,7 @@ class ProteinLLMEmbeddingSource:
             return
         try:
             import torch
-            from transformers import AutoModel, AutoTokenizer
+            from transformers import AutoTokenizer, EsmModel
         except ImportError as exc:
             raise ImportError(
                 "Protein-LLM embeddings require torch and transformers. "
@@ -127,9 +127,10 @@ class ProteinLLMEmbeddingSource:
             self.model_name,
             local_files_only=self.local_files_only,
         )
-        self._model = AutoModel.from_pretrained(
+        self._model = EsmModel.from_pretrained(
             self.model_name,
             local_files_only=self.local_files_only,
+            add_pooling_layer=False,
         ).to(resolved_device)
         self._model.eval()
         self._torch = torch
