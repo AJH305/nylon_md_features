@@ -1,0 +1,5 @@
+heldout_position,n_train,n_test,inner_mae,selected_descriptor_set,selected_model,selected_pca_components,selected_lengthscale_multiplier,selected_sigma_main,selected_sigma_epi,selected_sigma_noise
+99,20,15,44.26724014111394,physical,epistatic,,0.5,0.5,2.0,0.5
+134,14,21,25.470536769545422,kidera,additive,,2.0,0.5,0.0,0.5
+304,9,26,44.87231293469619,kidera,epistatic,,2.0,0.5,2.0,0.5
+330,24,11,32.830523367778966,physical,epistatic,,0.5,0.5,2.0,0.5

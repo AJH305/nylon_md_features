@@ -1,5 +1,5 @@
 heldout_position,n_train,n_test,selected_descriptor_set,selected_model,selected_lengthscale,selected_sigma_main,selected_sigma_epi,selected_sigma_noise,inner_mae
-99,20,15,physical,epistatic,0.2,0.5,2.0,0.5,33.64601450264737
-134,14,21,physical,additive,0.2,0.5,0.0,0.5,28.54234281554447
-304,9,26,physical,additive,0.5,0.5,0.0,0.5,45.93268567845798
-330,24,11,physical,epistatic,0.2,0.5,4.0,0.5,28.0788641681375
+99,20,15,esm2_target,epistatic,0.2,0.5,2.0,0.5,44.913398461768566
+134,14,21,esm2_global_delta,global_rbf,0.5,0.5,0.0,0.5,25.342137740885164
+304,9,26,esm2_window_delta,epistatic,0.5,0.5,4.0,0.5,44.508062138520295
+330,24,11,esm2_target,epistatic,0.2,0.5,4.0,0.5,38.28641254616543

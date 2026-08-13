@@ -1,0 +1,8 @@
+check,status
+data integrity,PASS
+classical baseline retention,PASS
+descriptor standardization,PASS
+kernel PSD,PASS
+outer prediction uniqueness,PASS
+positive uncertainty,PASS
+training-only distance scale,PASS

@@ -1,0 +1,3 @@
+selected_descriptor_set,selected_model,selected_pca_components,selected_lengthscale_multiplier,selected_sigma_main,selected_sigma_epi,selected_sigma_noise,count
+physical,epistatic,,0.5,0.5,2.0,0.5,34
+physical,epistatic,,0.5,0.5,4.0,0.5,1

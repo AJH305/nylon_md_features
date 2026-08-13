@@ -1,4 +1,6 @@
 selected_descriptor_set,selected_model,selected_lengthscale,selected_sigma_main,selected_sigma_epi,selected_sigma_noise,count
-physical,epistatic,0.2,0.5,4.0,0.5,26
-physical,epistatic,0.2,0.5,2.0,0.5,8
-physical,epistatic,0.5,0.5,4.0,0.5,1
+kidera,epistatic,0.2,0.5,4.0,0.5,23
+esm2_target,epistatic,0.2,0.5,2.0,0.5,6
+esm2_target,epistatic,0.2,0.5,4.0,0.5,4
+kidera,epistatic,0.2,0.5,2.0,0.5,1
+kidera,epistatic,0.5,0.5,4.0,0.5,1
