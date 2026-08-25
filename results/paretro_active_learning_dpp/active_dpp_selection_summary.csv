@@ -1,0 +1,2 @@
+algorithm,n_valid_deduplicated_candidates,n_candidate_pool,n_exploration,n_conservative_dpp,n_balanced_dpp,n_generated_selected,n_controls,n_total_panel,acquisition_beta,dpp_shortlist_size,dpp_random_seed,gp_descriptor_set,gp_model_family,gp_pca_components,complete_panel_mean_kernel_similarity,complete_panel_log_determinant,complete_panel_isometry_score
+sequential_variance_plus_exact_k_dpp,160,160,5,6,6,17,3,20,2.0,50,20260822,physical,epistatic,,0.28342798223701693,-9.679717229108086,0.5658676109102176
